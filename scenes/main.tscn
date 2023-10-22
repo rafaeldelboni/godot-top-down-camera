@@ -1,0 +1,76 @@
+[gd_scene load_steps=9 format=3 uid="uid://b3oo020mjmqwk"]
+
+[ext_resource type="PackedScene" uid="uid://bqtibuselkcyg" path="res://scenes/player/player.tscn" id="1_iawd8"]
+[ext_resource type="Material" uid="uid://cod1nfi40g0x2" path="res://materials/floor_material.tres" id="1_sgxfx"]
+[ext_resource type="Material" uid="uid://cf8airwymo70q" path="res://materials/wall_material.tres" id="2_1wd7q"]
+[ext_resource type="Script" path="res://scripts/wall.gd" id="4_52bh5"]
+[ext_resource type="PackedScene" uid="uid://bhbdpbplq2rot" path="res://scenes/top_down_camera.tscn" id="4_jm68s"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lx0gb"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_5mqcx"]
+sky_material = SubResource("ProceduralSkyMaterial_lx0gb")
+
+[sub_resource type="Environment" id="Environment_frt41"]
+background_mode = 2
+sky = SubResource("Sky_5mqcx")
+tonemap_mode = 2
+
+[node name="world" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_frt41")
+
+[node name="player" parent="." instance=ExtResource("1_iawd8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="map" type="Node3D" parent="."]
+
+[node name="floor" type="CSGBox3D" parent="map"]
+material_override = ExtResource("1_sgxfx")
+use_collision = true
+size = Vector3(10, 1, 10)
+
+[node name="wall" type="CSGBox3D" parent="map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 2, 0)
+material_override = ExtResource("2_1wd7q")
+use_collision = true
+size = Vector3(1, 3, 10)
+
+[node name="wall2" type="CSGBox3D" parent="map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 2, 0)
+material_override = ExtResource("2_1wd7q")
+use_collision = true
+size = Vector3(1, 3, 10)
+
+[node name="wall3" type="CSGBox3D" parent="map"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.96701e-07, 2, 4.5)
+layers = 2
+material_override = ExtResource("2_1wd7q")
+use_collision = true
+size = Vector3(1, 3, 8)
+
+[node name="wall5" type="CSGBox3D" parent="map"]
+transform = Transform3D(-4.37114e-08, 0, 0.36, 0, 1, 0, -1, 0, -1.57361e-08, 2.6, 2, 1.5)
+layers = 2
+material_override = ExtResource("2_1wd7q")
+use_collision = true
+size = Vector3(1, 3, 8)
+script = ExtResource("4_52bh5")
+
+[node name="wall4" type="CSGBox3D" parent="map"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1.96701e-07, 2, -4.5)
+material_override = ExtResource("2_1wd7q")
+use_collision = true
+size = Vector3(1, 3, 8)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+layers = 3
+omni_range = 8.0
+
+[node name="camera" parent="." node_paths=PackedStringArray("target") instance=ExtResource("4_jm68s")]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 6, 3)
+target = NodePath("../player")
