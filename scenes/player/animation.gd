@@ -24,6 +24,5 @@ func set_moving(value : bool):
 		state_machine.travel("Idle")
 
 func set_moving_speed(value : float):
-	print(move_speed)
 	move_speed = clamp(value, 0.0, 1.0)
 	self.set(moving_blend_path, move_speed)

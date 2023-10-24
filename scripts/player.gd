@@ -20,16 +20,7 @@ var gravity : float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 func get_input() -> Vector3:
 	var raw_input := Input.get_vector("left", "right", "forward", "backward")
-	
 	var input = (transform.basis * Vector3(raw_input.x, 0, raw_input.y)).normalized()
-	
-#	var input := Vector3.ZERO
-#
-#	# This is to ensure that diagonal input isn't stronger than axis aligned input
-#	input.x = raw_input.x * sqrt(1.0 - raw_input.y * raw_input.y / 2.0)
-#	input.z = raw_input.y * sqrt(1.0 - raw_input.x * raw_input.x / 2.0)
-#	input.y = 0.0
-
 	return input
 
 func orient_character_to_direction(direction: Vector3, delta: float) -> void:
