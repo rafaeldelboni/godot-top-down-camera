@@ -22,27 +22,22 @@ var gravity : float = ProjectSettings.get_setting("physics/3d/default_gravity")
 func start_walking() -> void :
 	walking = true
 	if not running:
-		print("walk1")
 		animation_player.play("Walking")
 	else:
-		print("run1")
 		animation_player.play("Running")
 
 func stop_walking() -> void :
 	walking = false
-	print("idle1")
 	animation_player.play("Idle")
 	
 func start_running() -> void :
 	running = true
 	if walking:
-		print("run2")
 		animation_player.play("Running")
 	
 func stop_running() -> void :
 	running = false
 	if walking:
-		print("walk2")
 		animation_player.play("Walking")
 		
 func orient_character_to_direction(direction: Vector3, delta: float) -> void:

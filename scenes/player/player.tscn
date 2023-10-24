@@ -3049,7 +3049,7 @@ shape = SubResource("CylinderShape3D_xyd8g")
 transform = Transform3D(0.12, 0, 0, 0, 0.12, 0, 0, 0, 0.12, 0, 0, 0)
 
 [node name="armature" type="Node3D" parent="visuals"]
-transform = Transform3D(0.993701, 0.0654818, -0.0909391, -0.0596737, 0.996088, 0.0651838, 0.0948517, -0.0593466, 0.99372, 0.225296, 10.9797, 0.0164782)
+transform = Transform3D(0.993701, 0.0654819, -0.0909391, -0.0596737, 0.996088, 0.0651838, 0.0948517, -0.0593466, 0.99372, 0.225296, 10.9797, 0.0164782)
 
 [node name="Skeleton3D" type="Skeleton3D" parent="visuals/armature"]
 bones/0/name = "Bone"

@@ -1,9 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://b3oo020mjmqwk"]
+[gd_scene load_steps=11 format=3 uid="uid://b3oo020mjmqwk"]
 
 [ext_resource type="PackedScene" uid="uid://bqtibuselkcyg" path="res://scenes/player/player.tscn" id="1_iawd8"]
 [ext_resource type="Material" uid="uid://cod1nfi40g0x2" path="res://materials/floor_material.tres" id="1_sgxfx"]
 [ext_resource type="Material" uid="uid://cf8airwymo70q" path="res://materials/wall_material.tres" id="2_1wd7q"]
-[ext_resource type="Script" path="res://scripts/wall.gd" id="4_52bh5"]
+[ext_resource type="Script" path="res://scripts/mesh_hide.gd" id="4_8jvmm"]
 [ext_resource type="PackedScene" uid="uid://bhbdpbplq2rot" path="res://scenes/top_down_camera.tscn" id="4_jm68s"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lx0gb"]
@@ -18,6 +18,10 @@ background_mode = 2
 sky = SubResource("Sky_5mqcx")
 tonemap_mode = 2
 
+[sub_resource type="BoxMesh" id="BoxMesh_bo6w2"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_teumd"]
+
 [node name="world" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -27,6 +31,11 @@ environment = SubResource("Environment_frt41")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
 [node name="map" type="Node3D" parent="."]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+layers = 3
+omni_range = 8.0
 
 [node name="floor" type="CSGBox3D" parent="map"]
 material_override = ExtResource("1_sgxfx")
@@ -46,30 +55,43 @@ use_collision = true
 size = Vector3(1, 3, 10)
 
 [node name="wall3" type="CSGBox3D" parent="map"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.96701e-07, 2, 4.5)
-layers = 2
-material_override = ExtResource("2_1wd7q")
-use_collision = true
-size = Vector3(1, 3, 8)
-
-[node name="wall5" type="CSGBox3D" parent="map"]
-transform = Transform3D(-4.37114e-08, 0, 0.36, 0, 1, 0, -1, 0, -1.57361e-08, 2.6, 2, 1.5)
-layers = 2
-material_override = ExtResource("2_1wd7q")
-use_collision = true
-size = Vector3(1, 3, 8)
-script = ExtResource("4_52bh5")
-
-[node name="wall4" type="CSGBox3D" parent="map"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1.96701e-07, 2, -4.5)
 material_override = ExtResource("2_1wd7q")
 use_collision = true
 size = Vector3(1, 3, 8)
 
-[node name="OmniLight3D" type="OmniLight3D" parent="map"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
-layers = 3
-omni_range = 8.0
+[node name="hidable_wall" type="MeshInstance3D" parent="map"]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 1, 2.5, 2, 1.5)
+mesh = SubResource("BoxMesh_bo6w2")
+surface_material_override/0 = ExtResource("2_1wd7q")
+script = ExtResource("4_8jvmm")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="map/hidable_wall"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="map/hidable_wall/StaticBody3D"]
+shape = SubResource("BoxShape3D_teumd")
+
+[node name="hidable_wall2" type="MeshInstance3D" parent="map"]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 1, -2.5, 2, 1.5)
+mesh = SubResource("BoxMesh_bo6w2")
+surface_material_override/0 = ExtResource("2_1wd7q")
+script = ExtResource("4_8jvmm")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="map/hidable_wall2"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="map/hidable_wall2/StaticBody3D"]
+shape = SubResource("BoxShape3D_teumd")
+
+[node name="hidable_wall3" type="MeshInstance3D" parent="map"]
+transform = Transform3D(8, 0, 0, 0, 3, 0, 0, 0, 1, -8.9407e-08, 2, 4.5)
+mesh = SubResource("BoxMesh_bo6w2")
+surface_material_override/0 = ExtResource("2_1wd7q")
+script = ExtResource("4_8jvmm")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="map/hidable_wall3"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="map/hidable_wall3/StaticBody3D"]
+shape = SubResource("BoxShape3D_teumd")
 
 [node name="camera" parent="." node_paths=PackedStringArray("target") instance=ExtResource("4_jm68s")]
 transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 6, 3)
