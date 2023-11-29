@@ -13,7 +13,7 @@ extends CharacterBody3D
 @onready var speed : float = walk_speed
 @onready var visuals : Node3D = $visuals
 @onready var last_strong_direction : Vector3 = Vector3.FORWARD
-@onready var animation_tree = $AnimationTree
+@onready var animation_tree : PlayerAnimation = $AnimationTree as PlayerAnimation
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity : float = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -31,7 +31,7 @@ func orient_character_to_direction(direction: Vector3, delta: float) -> void:
 		model_scale
 	)
 
-func _physics_process(delta) -> void:
+func handle_movements(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():
 		velocity.y -= gravity * delta
@@ -56,10 +56,12 @@ func _physics_process(delta) -> void:
 	if direction.length() == 0 and velocity.length() < stopping_speed:
 		velocity.x = move_toward(velocity.x, 0, speed)
 		velocity.z = move_toward(velocity.z, 0, speed)
-		animation_tree.set_moving(false)
 	else:
 		velocity = velocity.lerp(direction * speed, acceleration * delta)
-		animation_tree.set_moving(true)
-		animation_tree.set_moving_speed(inverse_lerp(walk_speed, run_speed, velocity.length()))
+
+	animation_tree.set_moving_speed(remap(velocity.length(), 0, run_speed, 0, 1))
 
 	move_and_slide()
+
+func _physics_process(delta: float) -> void:
+	handle_movements(delta)

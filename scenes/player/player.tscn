@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://bqtibuselkcyg"]
+[gd_scene load_steps=28 format=3 uid="uid://bqtibuselkcyg"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ndu1u"]
 [ext_resource type="Texture2D" uid="uid://ca34mifs11ogn" path="res://assets/models/abel2_Image_0.png" id="2_xvtd2"]
@@ -3039,38 +3039,33 @@ _data = {
 "Walking": SubResource("Animation_nmwmx")
 }
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_m3pk8"]
-animation = &"Idle"
-
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_83pbo"]
-animation = &"Walking"
+animation = &"Idle"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6x5kj"]
 animation = &"Running"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_d1nt3"]
+animation = &"Walking"
 
 [sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_nu11i"]
 blend_point_0/node = SubResource("AnimationNodeAnimation_83pbo")
 blend_point_0/pos = 0.0
 blend_point_1/node = SubResource("AnimationNodeAnimation_6x5kj")
 blend_point_1/pos = 1.0
+blend_point_2/node = SubResource("AnimationNodeAnimation_d1nt3")
+blend_point_2/pos = 0.5
 min_space = 0.0
 value_label = ""
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_p1h31"]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_8wr7x"]
-xfade_time = 0.2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_pd6hj"]
-xfade_time = 0.2
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_roubn"]
+advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_my5n2"]
-states/Idle/node = SubResource("AnimationNodeAnimation_m3pk8")
-states/Idle/position = Vector2(299.511, 75.5317)
 states/Move/node = SubResource("AnimationNodeBlendSpace1D_nu11i")
-states/Move/position = Vector2(482.011, 110.032)
-states/Start/position = Vector2(148.5, 74.0159)
-transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_p1h31"), "Idle", "Move", SubResource("AnimationNodeStateMachineTransition_8wr7x"), "Move", "Idle", SubResource("AnimationNodeStateMachineTransition_pd6hj")]
+states/Move/position = Vector2(295.011, 100.016)
+states/Start/position = Vector2(109.5, 75.0159)
+transitions = ["Start", "Move", SubResource("AnimationNodeStateMachineTransition_roubn")]
 graph_offset = Vector2(-115.989, -18.4683)
 
 [node name="player" type="CharacterBody3D" groups=["players"]]
@@ -4061,5 +4056,5 @@ libraries = {
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource("AnimationNodeStateMachine_my5n2")
 anim_player = NodePath("../AnimationPlayer")
-parameters/Move/blend_position = 0.000439174
+parameters/Move/blend_position = 0.000878349
 script = ExtResource("3_pp813")
