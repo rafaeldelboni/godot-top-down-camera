@@ -1,10 +1,12 @@
-[gd_scene load_steps=11 format=3 uid="uid://b3oo020mjmqwk"]
+[gd_scene load_steps=16 format=3 uid="uid://b3oo020mjmqwk"]
 
 [ext_resource type="PackedScene" uid="uid://bqtibuselkcyg" path="res://scenes/player/player.tscn" id="1_iawd8"]
 [ext_resource type="Material" uid="uid://cod1nfi40g0x2" path="res://materials/floor_material.tres" id="1_sgxfx"]
 [ext_resource type="Material" uid="uid://cf8airwymo70q" path="res://materials/wall_material.tres" id="2_1wd7q"]
 [ext_resource type="Script" path="res://scripts/mesh_hide.gd" id="4_8jvmm"]
 [ext_resource type="PackedScene" uid="uid://bhbdpbplq2rot" path="res://scenes/top_down_camera.tscn" id="4_jm68s"]
+[ext_resource type="Shader" path="res://shaders/vignette.gdshader" id="6_p8nji"]
+[ext_resource type="Shader" path="res://shaders/fisheye.gdshader" id="7_3gavx"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lx0gb"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -16,16 +18,35 @@ sky_material = SubResource("ProceduralSkyMaterial_lx0gb")
 [sub_resource type="Environment" id="Environment_frt41"]
 background_mode = 2
 sky = SubResource("Sky_5mqcx")
-tonemap_mode = 2
+tonemap_mode = 3
+glow_enabled = true
+glow_bloom = 1.0
+adjustment_enabled = true
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_iwye1"]
+exposure_multiplier = 1.5
 
 [sub_resource type="BoxMesh" id="BoxMesh_bo6w2"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_teumd"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uumoy"]
+shader = ExtResource("7_3gavx")
+shader_parameter/amount = 1.25
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8dnuw"]
+shader = ExtResource("6_p8nji")
+shader_parameter/player_position = Vector2(0.5, 0.5)
+shader_parameter/color = Color(0, 0, 0, 1)
+shader_parameter/MULTIPLIER = 0.75
+shader_parameter/SCALE = 1.0
+shader_parameter/SOFTNESS = 0.65
+
 [node name="world" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_frt41")
+camera_attributes = SubResource("CameraAttributesPractical_iwye1")
 
 [node name="player" parent="." instance=ExtResource("1_iawd8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
@@ -96,3 +117,30 @@ shape = SubResource("BoxShape3D_teumd")
 [node name="camera" parent="." node_paths=PackedStringArray("target") instance=ExtResource("4_jm68s")]
 transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 6, 3)
 target = NodePath("../player")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FishEyeColorRect" type="ColorRect" parent="Control"]
+material = SubResource("ShaderMaterial_uumoy")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VignetteColorRect" type="ColorRect" parent="Control"]
+material = SubResource("ShaderMaterial_8dnuw")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)

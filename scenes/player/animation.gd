@@ -13,5 +13,6 @@ func _ready() -> void:
 	animation_player["playback_default_blend_time"] = 0.2
 
 func set_moving_speed(value : float) -> void:
+	print(value)
 	move_speed = clamp(value, 0.0, 1.0)
 	self.set(moving_blend_path, move_speed)
