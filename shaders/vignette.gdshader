@@ -1,29 +1,23 @@
 shader_type canvas_item;
-uniform vec2 player_position;
-uniform vec4 color : source_color = vec4(0.305, 0.298, 0.341,1);
 
-uniform float MULTIPLIER = 0.56;
-uniform float SCALE = 0.5;
-uniform float SOFTNESS = 0.65;
+uniform float vignette_intensity = 0.4;
+uniform float vignette_opacity : hint_range(0.0, 1.0) = 0.5;
+uniform vec4 vignette_rgb : source_color = vec4(0.0, 0.0, 0.0, 1.0);
 
+uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_linear_mipmap;
 
-float circle(vec2 position, float radius, float feather)
-{
-	return smoothstep(radius, radius + feather, dot(position, position ) * 8.0);
-}
-
-float vigTypeB(vec2 dude){
-	float vignette = circle(dude - vec2(player_position.x,player_position.y ), 0.1, 0.5);
-	return vignette;
-}
-
-float vigTypeA(vec2 dude){
-	float val = distance(vec2(dude.x , dude.y * MULTIPLIER), vec2(player_position.x , player_position.y * MULTIPLIER));
-	val = val / SCALE;
-	float vignette = smoothstep(0.2, SOFTNESS, val);
-	return vignette;
+float vignette(vec2 uv){
+	uv *= 1.0 - uv.xy;
+	float vignette = uv.x * uv.y * 15.0;
+	return pow(vignette, vignette_intensity * vignette_opacity);
 }
 
 void fragment(){
-	COLOR = vec4(color.rgb , vigTypeA(UV));
+	vec4 color = texture(SCREEN_TEXTURE, SCREEN_UV);
+	vec4 text = texture(TEXTURE, UV);
+	
+	text.rgba *= (vignette_rgb.rgba);
+	text.rgba *= (1.0 - vignette(UV));
+	
+	COLOR = vec4((text.rgb)*color.rgb,text.a);
 }

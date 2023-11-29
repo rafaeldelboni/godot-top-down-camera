@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://b3oo020mjmqwk"]
+[gd_scene load_steps=18 format=3 uid="uid://b3oo020mjmqwk"]
 
 [ext_resource type="PackedScene" uid="uid://bqtibuselkcyg" path="res://scenes/player/player.tscn" id="1_iawd8"]
 [ext_resource type="Material" uid="uid://cod1nfi40g0x2" path="res://materials/floor_material.tres" id="1_sgxfx"]
@@ -7,6 +7,12 @@
 [ext_resource type="PackedScene" uid="uid://bhbdpbplq2rot" path="res://scenes/top_down_camera.tscn" id="4_jm68s"]
 [ext_resource type="Shader" path="res://shaders/vignette.gdshader" id="6_p8nji"]
 [ext_resource type="Shader" path="res://shaders/fisheye.gdshader" id="7_3gavx"]
+
+[sub_resource type="Gradient" id="Gradient_gk1f3"]
+colors = PackedColorArray(0, 0.0239335, 0.0993185, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_scp7k"]
+gradient = SubResource("Gradient_gk1f3")
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lx0gb"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -22,6 +28,8 @@ tonemap_mode = 3
 glow_enabled = true
 glow_bloom = 1.0
 adjustment_enabled = true
+adjustment_contrast = 1.1
+adjustment_color_correction = SubResource("GradientTexture1D_scp7k")
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_iwye1"]
 exposure_multiplier = 1.5
@@ -32,15 +40,13 @@ exposure_multiplier = 1.5
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_uumoy"]
 shader = ExtResource("7_3gavx")
-shader_parameter/amount = 1.25
+shader_parameter/effect_amount = 1.5
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8dnuw"]
 shader = ExtResource("6_p8nji")
-shader_parameter/player_position = Vector2(0.5, 0.5)
-shader_parameter/color = Color(0, 0, 0, 1)
-shader_parameter/MULTIPLIER = 0.75
-shader_parameter/SCALE = 1.0
-shader_parameter/SOFTNESS = 0.65
+shader_parameter/vignette_intensity = 0.75
+shader_parameter/vignette_opacity = 0.75
+shader_parameter/vignette_rgb = Color(0, 0, 0, 1)
 
 [node name="world" type="Node3D"]
 
